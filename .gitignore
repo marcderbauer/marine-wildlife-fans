@@ -1,3 +1,5 @@
 .vscode/*
 ngrok.exe
 reference.txt
+__pycache__
+*.pyc
