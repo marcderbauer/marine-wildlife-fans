@@ -25,9 +25,8 @@ def receive_message():
        messaging = event['messaging']
        for message in messaging:
             if message.get('message'):
-                #Facebook Messenger ID for user so we know where to send response back to
-                recipient_id = message['sender']['id']
-                if message['message'].get('text'):
+                recipient_id = message['sender']['id']  # Recipient ID to know who to message
+                if message['message'].get('text'):      # If message is a text
                     text = message['message'].get('text')
                     if text == "facts":
                         facts = random_mwl_fact()
