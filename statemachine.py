@@ -1,32 +1,31 @@
-# Generalized Statemachine, taken from https://www.python-course.eu/finite_state_machine.php
+# Modified Statemachine, original taken from https://www.python-course.eu/finite_state_machine.php
 
 class StateMachine:
     def __init__(self):
         self.handlers = {}
         self.startState = None
-        self.endStates = []
 
     def add_state (self, name, handler, end_state=0):
-        name =  name.upper() # ALLCAPS NAME
+        name =  name.upper()
         self.handlers[name] = handler
-        if end_state:
-            self.endStates.append(name)
     
     def set_start (self, name):
-        self.startState = name.upper() # Set start State (ALLCAPS)
+        self.startState = name.upper()
 
-    def run(self, cargo):
-        try:
+    def run(self, message, user):
+        # be sure to set start before running!
+        
+        if not user.state:
             handler = self.handlers[self.startState]
-        except:
-            raise InitializationError ("must call .set_start() before .run()")
-        if not self.endStates:
-            raise InitializationError ("at least one state muse be an end_state")
+        else:
+            handler = self.handlers[user.state.upper()]
 
-        while True:
-            (newState, cargo) = handler(cargo)
-            if newState.upper() in self.endStates:
-                print("reached", newState)
-                break
-            else:
-                handler = self.handlers[newState.upper()]
+        user.state = handler(message, user.user_id)
+        handler = self.handlers[user.state.upper()]
+        return user.state
+
+
+class StateMachineUser:
+    def __init__(self, user_id, state = None):
+        self.user_id = user_id
+        self.state = state

@@ -8,6 +8,8 @@ app = Flask(__name__)
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 bot = Bot(ACCESS_TOKEN)
+# TODO
+# change to be able to work on multiple apps
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -40,6 +42,11 @@ def receive_message():
                     send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
 
+###TODO:
+# if haven't recieved a message from that user yet, create new StateMachineUser Instance with userid (and empty state ?)
+# if have recieved before, access user and continue with that current state
+#  -> create new method for it, don't want to overcomplicate shit
+# THEN: Process message!
 
 #chooses a random message to send to the user
 def get_message():
