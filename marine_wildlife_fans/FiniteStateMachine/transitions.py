@@ -1,8 +1,8 @@
-from app import send_message
+
 from FiniteStateMachine.statemachine import StateMachine, StateMachineUser
 from wildlife_facts import random_mwl_fact
 from pymessenger.bot import Bot
-# import app
+
 # TODO: replace comparisons with regex
 
 id_test = [12345 ,69420, 210320]
@@ -11,7 +11,7 @@ users = {} # Dict of StateMachineUsers
 def start_transitions(txt, user_id):
     txt = txt.upper() ### Move over to statemachine? # General processing function(to upper, strip whitespace,...)
     if txt == "ANIMAL FACT":
-        send_message(random_mwl_fact(), user_id)
+        # send_message(random_mwl_fact(), user_id)
         newState = "animal_fact_state"
     elif txt == "PICTURE":
         # send message random picture
