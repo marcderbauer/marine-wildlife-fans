@@ -1,16 +1,8 @@
-import random
-import os
-from flask import Flask, request
-from pymessenger.bot import Bot
-from wildlife_facts import random_mwl_fact
+from marine_wildlife_fans import app, send_message, get_random_message, VERIFY_TOKEN
+from marine_wildlife_fans.wildlife_facts import random_mwl_fact
+from flask import request
 
-app = Flask(__name__)
-ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
-VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
-bot = Bot(ACCESS_TOKEN)
-# TODO
-# change to be able to work on multiple apps
-
+# VERIFY BOT
 @app.route('/', methods=['GET'])
 def handle_verification():
     if (request.args.get('hub.verify_token', '') == VERIFY_TOKEN):
@@ -20,6 +12,7 @@ def handle_verification():
         print("Wrong token")
         return "Error, wrong validation token"
 
+# HANDLE MESSAGES
 @app.route("/", methods=['POST'])
 def receive_message():
     output = request.get_json()
@@ -34,31 +27,16 @@ def receive_message():
                         facts = random_mwl_fact()
                         send_message(recipient_id, facts)
                         return "Message Processed"
-                    response_sent_text = get_message()
+                    response_sent_text = get_random_message()
                     send_message(recipient_id, response_sent_text)
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
-                    response_sent_nontext = get_message()
+                    response_sent_nontext = get_random_message()
                     send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
 
-###TODO:
-# if haven't recieved a message from that user yet, create new StateMachineUser Instance with userid (and empty state ?)
-# if have recieved before, access user and continue with that current state
-#  -> create new method for it, don't want to overcomplicate shit
-# THEN: Process message!
-
-#chooses a random message to send to the user
-def get_message():
-    sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
-    # return selected item to the user
-    return random.choice(sample_responses)
-
-#uses PyMessenger to send response to user
-def send_message(recipient_id, response):
-    #sends user the text message provided via input response parameter
-    bot.send_text_message(recipient_id, response)
-    return "success"
-
-if __name__ == "__main__":
-    app.run()
+    # if recipient id in postgres
+        # set state to state from user
+        # handle message (userstate, income message)
+            # answer
+        # change user state

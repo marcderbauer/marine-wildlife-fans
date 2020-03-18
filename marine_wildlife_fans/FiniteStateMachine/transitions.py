@@ -1,6 +1,8 @@
-from statemachine import StateMachine, StateMachineUser
+from app import send_message
+from FiniteStateMachine.statemachine import StateMachine, StateMachineUser
 from wildlife_facts import random_mwl_fact
-#from app import send_message #send_message(recipient_id, response)
+from pymessenger.bot import Bot
+# import app
 # TODO: replace comparisons with regex
 
 id_test = [12345 ,69420, 210320]
@@ -9,7 +11,7 @@ users = {} # Dict of StateMachineUsers
 def start_transitions(txt, user_id):
     txt = txt.upper() ### Move over to statemachine? # General processing function(to upper, strip whitespace,...)
     if txt == "ANIMAL FACT":
-        print(random_mwl_fact())
+        send_message(random_mwl_fact(), user_id)
         newState = "animal_fact_state"
     elif txt == "PICTURE":
         # send message random picture
@@ -42,7 +44,7 @@ def animal_fact_transitions(txt, user_id):
         newState = "start_state"
     return(newState)
 
-def  contact_transitions(txt, user_id):
+def contact_transitions(txt, user_id):
     txt = txt.upper()
     if txt == "HUMAN":
         print("We'll get back to you soon, just look out for your messages!")
@@ -70,14 +72,10 @@ def process_email(txt):
 if __name__ == "__main__":
     for id in id_test:
         users[id] = StateMachineUser(id)
-    m = StateMachine()
-    m.add_state("start_state", start_transitions)
-    m.add_state("animal_fact_state", animal_fact_transitions)
-    m.add_state("contact_state", contact_transitions)
-    m.add_state("contact_state_2", contact_transitions_2)
-    m.set_start("start_state")
+    
 
-
+"""
     users[id_test[0]].state = m.run("animal fact", user=users[id_test[0]])
     print(users[id_test[0]].state)
     m.run("contact", user=users[id_test[0]])
+"""

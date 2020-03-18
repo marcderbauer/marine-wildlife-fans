@@ -1,5 +1,7 @@
 .vscode/*
 ngrok.exe
 reference.txt
-__pycache__
+__pycache__/*
 *.pyc
+postgres_test.py
+.venv/*
